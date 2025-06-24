@@ -408,7 +408,7 @@ autofitVariogram3 <- function(formula,
 #' @return \item{variogramPlots}{Plot containing all fitted variogram models of the given dataset.}
 #'
 #' @examples
-#' autoKrigMap(x = msp3.sp, boundary = field.sf)
+#' autoKrigMap(x = points_sf, boundary = field_sf)
 #'
 #' @import concaveman 
 #' @import cowplot 
@@ -602,41 +602,38 @@ autoKrigMap <- function(x,
 
 # Parameter transfer in the CMD ----
 args <- commandArgs(trailingOnly=TRUE)
-sg   <- args[1] # Schlaggrenze als Polygonshape in WGS84
-bd   <- args[2] # Boundary [1] Schlaggrenze, [0]   
-sdat <- args[3] # Sensordaten als Punktshape in WGS84 (EPSG: 4326) oder UTM (EPSG: ) 
-date <- as.character(args[4]) # Datum der Sensorkartierung
-#blg  <- as.integer(args[6]) # Blockgr??e in Meter
-#pxg  <- as.integer(args[7]) # Pixelgr??e in Meter 
-  
-#farm_name <- "LPP"
+farm_name  <- args[1] # string for farm name (e.g. "LPP") 
+field_name <- args[2] # string for field name (e.g. "1392")
+boundary   <- args[3] # path to field boundary Shapefile in WGS84
+bd         <- args[4] # Integer of [1] boundary exist (default) or [0] boundary is auto created    
+points_sf  <- args[5] # path to sensor point data in WGS84 (EPSG: 4326) or UTM (EPSG: 25833) 
+date       <- as.character(args[4]) # Datum der Sensorkartierung
+
+# Examples 
+#farm_name  <- "LPP"
 #field_name <- "1392"
-#bdry   <- "data/1392/PP_1392_Schlaggrenze_Neu.shp" 
-#bd   <-  1 # integer [1] or [0]; field boundary [1] , no boundary [0]  
-#sdat <- "data/1392/LPP_1392_EPSG_4326_Geophilus_2017-09-27.shp"
-#date <- "2017-09-27"   # Datum der Sensorkartierung
-#blg  <- 10  
-#pxg  <- 2 
+#boundary   <- "data/1392/PP_1392_Schlaggrenze_Neu.shp" 
+#bd         <-  1   
+#points_sf  <- "data/1392/LPP_1392_EPSG_4326_Geophilus_2017-09-27.shp"
+#date       <- "2017-09-27"   
+
 
 #  Boundary festlegen ----
 
 if (bd == 1){
   # Einladen der Schlaggrenze ----
-  sg_sf <- sf::st_read(bdry)
+  sg_sf <- sf::st_read(boundary)
 } else {
   sg_sf <- NULL
 }
 
 # Sensordaten einladen ----
-sdat_sf <- sf::st_read(sdat)
-
-# Datum Sensorkartierung ----
-date <- as.character(date)
+sdat_sf <- sf::st_read(points_sf)
 
 # Interpolation starten ----
-results_akm <- autoKrigMap(x = sdat_sf, 
+results_akm <- autoKrigMap(x = sdat_sf[2], 
                        boundary = sg_sf, 
-                       nmax =10)
+                       nmax = 40)
 
 
 # Save as GeoTiff ----
@@ -644,8 +641,8 @@ results_akm <- autoKrigMap(x = sdat_sf,
 # Set output path
 dir.create("output")
 path.out <- "output"
-
 r_stack <- results_akm$maps 
+
 for (i in seq_len(nlyr(r_stack))) {
   terra::writeRaster(r_stack[[i]], paste0(path.out,"/", farm_name, "_", field_name, "_OK_",names(r_stack)[i],"_",date,".tif"), overwrite=TRUE)
 }
