@@ -1,0 +1,2 @@
+# path to: Rscript.exe | set farm name | set field name | path to: Interpolation_CMD.R | path to: boundary shape | set parameter to: 1 | path to: sensor data (.shp) | set date of sensor data    
+C:\Program Files\R\R-4.0.2\bin>Rscript.exe C:\Users\ischroeter\Nextcloud5\BoDi\Algorithmen\2_VisDat\autoKrigMap\Interpolation_CMD.R LPP 1392 C:\Users\ischroeter\Nextcloud5\BoDi\Algorithmen\2_VisDat\autoKrigMap\data\PP_1392_Schlaggrenze_Neu.shp 1 C:\Users\ischroeter\Nextcloud5\BoDi\Algorithmen\2_VisDat\autoKrigMap\data\LPP_1392_EPSG_4326_Geophilus_2017-09-27.shp 2017-09-27 

@@ -1,0 +1,2 @@
+
+C:\Program Files\R\R-4.0.2\bin>Rscript.exe C:\Users\ischroeter\Nextcloud5\BoDi\Algorithmen\2_VisDat\autoKrigMap\Interpolation_CMD.R LPP 1392 PP_1392_Schlaggrenze_Neu.shp 1 LPP_1392_EPSG_4326_Geophilus_2017-09-27.shp 2017-09-27 
