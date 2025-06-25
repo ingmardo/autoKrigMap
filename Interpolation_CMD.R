@@ -18,7 +18,7 @@ library(optparse)
 
 # Helper functions ----
 
-## creatRast ----
+## createRast ----
 createRast <- function(boundary, res = c(10, 10), buffer = 10, value = 0) {
   if (class(boundary)[1] == "sf") {
     boundary <- vect(boundary)
